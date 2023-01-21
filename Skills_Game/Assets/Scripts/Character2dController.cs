@@ -4,15 +4,27 @@ using UnityEngine;
 
 public class Character2dController : MonoBehaviour
 {
-    public float MovementSpeed = 1;
+    public float MovementSpeed = 3f;
+
+    public Rigidbody2D rb;
+    public Animator animator;
+
+    Vector2 movement;
 
     public void Update()
     {
-        var movement = Input.GetAxis("Horizontal");
-        transform.position += new Vector3(movement, 0, 0) * Time.deltaTime * MovementSpeed;
-        movement = Input.GetAxis("Vertical");
-        transform.position += new Vector3(0, movement, 0) * Time.deltaTime * MovementSpeed;
+        movement.x = Input.GetAxisRaw("Horizontal");
+        movement.y = Input.GetAxisRaw("Vertical");
 
+        animator.SetFloat("Horizontal", movement.x);
+        animator.SetFloat("Vertical", movement.y);
+        animator.SetFloat("Speed", movement.sqrMagnitude);
+
+    }
+
+    public void FixedUpdate()
+    {
+        rb.MovePosition(rb.position + movement * MovementSpeed * Time.fixedDeltaTime);
     }
 
 
